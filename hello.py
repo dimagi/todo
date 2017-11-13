@@ -2,6 +2,7 @@ from datetime import datetime
 from flask import Flask, request, flash, url_for, redirect, \
      render_template, abort
 from flask_sqlalchemy import SQLAlchemy
+from flask_alembic import Alembic
 
 
 app = Flask(__name__)
@@ -9,6 +10,8 @@ app.config.from_pyfile('todo.cfg')
 app.config.from_envvar('TODO_SETTINGS', silent=True)
 
 db = SQLAlchemy(app)
+alembic = Alembic()
+alembic.init_app(app)
 
 
 class Todo(db.Model):
