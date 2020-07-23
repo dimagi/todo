@@ -21,12 +21,14 @@ class Todo(db.Model):
     text = db.Column(db.String)
     done = db.Column(db.Boolean)
     pub_date = db.Column(db.DateTime)
+    archived = db.Column(db.Boolean)
 
     def __init__(self, title, text):
         self.title = title
         self.text = text
         self.done = False
         self.pub_date = datetime.utcnow()
+        self.archive = False
 
 
 @app.route('/')
@@ -56,6 +58,7 @@ def new():
 def update_done():
     for todo in Todo.query.all():
         todo.done = ('done.%d' % todo.id) in request.form
+        todo.archived = ('archived.%d' % todo.id) in request.form
     flash('Updated status')
     db.session.commit()
     return redirect(url_for('show_all'))
